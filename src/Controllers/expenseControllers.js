@@ -25,7 +25,7 @@ const createExpense = async (req, res) => {
         recurrent,
         frecuency,
       });
-      res.status(200).json({ mensaje: "Earning succesfully created" });
+      // res.status(200).json({ mensaje: "Earning succesfully created" });
     });
   } catch (error) {
     console.error("Error creating earning:", error);

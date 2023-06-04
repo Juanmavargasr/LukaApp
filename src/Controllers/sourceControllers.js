@@ -3,7 +3,7 @@ const db = require("../db");
 
 const createSource = async (req, res) => {
   try {
-    const { sourceName } = req.body;
+    const { id, sourceName } = req.body;
     if (!sourceName) {
       return res.status(400).json({ error: "Mandatory data missing" });
     }
@@ -15,10 +15,9 @@ const createSource = async (req, res) => {
         sourceName,
       });
       res.json({
-        id,
         sourceName,
       });
-      res.status(200).json({ mensaje: "source Succesfully created" });
+      // res.status(200).json({ mensaje: "source Succesfully created" });
     });
   } catch (error) {
     console.error("Error creating source:", error);

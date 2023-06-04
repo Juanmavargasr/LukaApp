@@ -26,7 +26,7 @@ const createUser = async (req, res) => {
         phone,
         profileImage,
       });
-      res.status(200).json({ mensaje: "User succesfully created" });
+      // res.status(200).json({ mensaje: "User succesfully created" });
     });
   } catch (error) {
     console.error("Error creating user:", error);

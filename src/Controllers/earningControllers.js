@@ -45,7 +45,7 @@ const createEarning = async (req, res) => {
         paymentDate1,
         received,
       });
-      res.status(200).json({ mensaje: "Earning succesfully created" });
+      // res.status(200).json({ mensaje: "Earning succesfully created" });
     });
   } catch (error) {
     console.error("Error creating earning:", error);
