@@ -87,4 +87,17 @@ const pocket = {
   },
 };
 
-module.exports = { user, earning, expense, thrift, pocket };
+const source = {
+  id: "1",
+  sourceName: "bscs account",
+  sourceEarning: [],
+  sourceExpense: [],
+  createdAt: {
+    $date: "2023-07-04T05:00:00.000Z",
+  },
+  modofiedAt: {
+    $date: "2023-07-04T05:00:00.000Z",
+  },
+};
+
+module.exports = { user, earning, expense, thrift, pocket, source };
