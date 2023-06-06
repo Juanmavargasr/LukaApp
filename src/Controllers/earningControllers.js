@@ -1,10 +1,10 @@
 const earnign = require("../models");
 const db = require("../db");
+const { ObjectId } = require("mongodb");
 
 const createEarning = async (req, res) => {
   try {
     const {
-      id,
       earningName,
       earningQuantity,
       recurrent,
@@ -14,7 +14,6 @@ const createEarning = async (req, res) => {
     } = req.body;
 
     if (
-      !id ||
       !earningName ||
       !earningQuantity ||
       !recurrent ||
@@ -28,7 +27,6 @@ const createEarning = async (req, res) => {
     db.then(async (db) => {
       const collection = db.collection("earnings");
       const insertResult = await collection.insertOne({
-        id,
         earningName,
         earningQuantity,
         recurrent,
@@ -37,7 +35,6 @@ const createEarning = async (req, res) => {
         received,
       });
       res.json({
-        id,
         earningName,
         earningQuantity,
         recurrent,
@@ -56,15 +53,17 @@ const createEarning = async (req, res) => {
 const getEarning = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) {
-      return res.status(400).json({ error: "Mandatory data missing" });
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ error: "Invalid or non exist ID" });
     }
 
     db.then(async (db) => {
       const collection = db.collection("earnings");
-      const earningExist = await collection.findOne({ id });
+      const earningExist = await collection.findOne({ _id: new ObjectId(id) });
       if (earningExist) {
-        const earningFound = await collection.find({ id: id }).toArray();
+        const earningFound = await collection
+          .find({ _id: new ObjectId(id) })
+          .toArray();
         res.json(earningFound);
       } else {
         return res.status(409).json({ message: "earningID doesn't exist" });

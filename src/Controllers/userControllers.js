@@ -1,18 +1,18 @@
 const user = require("../models");
 const db = require("../db");
+const { ObjectId } = require("mongodb");
 
 const createUser = async (req, res) => {
   try {
-    const { id, firstName, lastName, email, phone, profileImage } = req.body;
+    const { firstName, lastName, email, phone, profileImage } = req.body;
 
-    if (!id || !firstName || !lastName || !email || !phone) {
+    if (!firstName || !lastName || !email || !phone) {
       return res.status(400).json({ error: "Mandatory data missing" });
     }
 
     db.then(async (db) => {
       const collection = db.collection("user");
       const insertResult = await collection.insertOne({
-        id,
         firstName,
         lastName,
         email,
@@ -38,15 +38,17 @@ const getUser = async (req, res) => {
   try {
     const id = req.params.id;
     // id = Number(id);
-    if (!id) {
-      return res.status(400).json({ error: "Mandatory data missing" });
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ error: "Invalid or non exist ID" });
     }
 
     db.then(async (db) => {
       const collection = db.collection("user");
-      const userExist = await collection.findOne({ id });
+      const userExist = await collection.findOne({ _id: new ObjectId(id) });
       if (userExist) {
-        const userFound = await collection.find({ id: id }).toArray();
+        const userFound = await collection
+          .find({ _id: new ObjectId(id) })
+          .toArray();
         res.json(userFound);
       } else {
         return res.status(409).json({ message: "UserID doesn't exist" });

@@ -1,9 +1,10 @@
 const source = require("../models");
 const db = require("../db");
+const { ObjectId } = require("mongodb");
 
 const createSource = async (req, res) => {
   try {
-    const { id, sourceName } = req.body;
+    const { sourceName } = req.body;
     if (!sourceName) {
       return res.status(400).json({ error: "Mandatory data missing" });
     }
@@ -11,7 +12,6 @@ const createSource = async (req, res) => {
     db.then(async (db) => {
       const collection = db.collection("source");
       const insertResult = await collection.insertOne({
-        id,
         sourceName,
       });
       res.json({
@@ -28,15 +28,17 @@ const createSource = async (req, res) => {
 const getSource = async (req, res) => {
   try {
     const id = req.params.id;
-    if (!id) {
-      return res.status(400).json({ error: "Mandatory data missing" });
+    if (!id || id.length !== 24) {
+      return res.status(400).json({ error: "Invalid or non exist ID" });
     }
 
     db.then(async (db) => {
       const collection = db.collection("source");
-      const sourceExist = await collection.findOne({ id });
+      const sourceExist = await collection.findOne({ _id: new ObjectId(id) });
       if (sourceExist) {
-        const sourceFound = await collection.find({ id: id }).toArray();
+        const sourceFound = await collection
+          .find({ _id: new ObjectId(id) })
+          .toArray();
         res.json(sourceFound);
       } else {
         return res.status(409).json({ message: "sourceID doesn't exist" });

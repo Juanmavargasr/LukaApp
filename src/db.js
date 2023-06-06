@@ -4,6 +4,7 @@ require("dotenv").config();
 const uri =
   "mongodb+srv://juanmavargasr2:kdaSVteJMVTc52Ha@lukaapp.hmskvbj.mongodb.net/";
 const client = new MongoClient(uri);
+// const client = new MongoClient("mongodb://127.0.0.1:27017");
 const dbName = "Luka";
 
 const connect = async () => {
